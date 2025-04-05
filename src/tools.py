@@ -1,12 +1,17 @@
 import cv2
 import numpy as np
 
-def angle (a1, a2, a3):
+def angle (a1: float, a2: float, a3: float):
     vec1 = a1 - a2
     vec2 = a3 - a2
     return np.degrees(np.arccos(np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))))
 
-def detect(c):
+def doubleEqual(a: float, b: float, delta = 1e-5):
+    if abs(a-b) < delta:
+        return True
+    return False
+
+def detect(c, printAngle: bool):
     shape = "Unidentified"
 
     peri = cv2.arcLength(c, True)
@@ -20,10 +25,10 @@ def detect(c):
         side2 = np.linalg.norm(vertices[1] - vertices[2])
         side3 = np.linalg.norm(vertices[2] - vertices[0])
 
-        if ((side1 == side2) and (side2 == side3) and (side1 == side3)):
-            shape = "3 Sides Equal Triangle"
-        elif ((side1 == side2) or (side2 == side3) or (side1 == side3)):
-            shape = "2 Sides Equal Triangle"
+        if (doubleEqual(side1,side2) and doubleEqual(side2,side3) and doubleEqual(side1,side3)):
+            shape = "3 S Eq Triangle"
+        elif (doubleEqual(side1,side2) or doubleEqual(side2,side3) or doubleEqual(side1,side3)):
+            shape = "2 S Eq Triangle"
         else:
             shape = "Triangle"
 
@@ -67,11 +72,12 @@ def detect(c):
         elif ((ar4 >= 0.95 and ar4 <= 1.05) and (ar41 >= 0.95 and ar41 <= 1.05)):
             shape = "Trapezund"
         
-        print (f"{shape} angles:\n\
-                1: {str(angle1)[0:5]}\
-                2: {str(angle2)[0:5]}\
-                3: {str(angle3)[0:5]}\
-                4: {str(angle4)[0:5]}")
+        if printAngle:
+            print (f"{shape} angles:\n\
+                    1: {str(angle1)[0:5]}\
+                    2: {str(angle2)[0:5]}\
+                    3: {str(angle3)[0:5]}\
+                    4: {str(angle4)[0:5]}")
         
     elif len(approx) == 5:
         shape = "Pentagon"

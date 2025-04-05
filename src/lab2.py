@@ -48,7 +48,7 @@ def main():
         centerX = int((figureMoments["m10"] / figureMoments["m00"])) # medium arhithmetic vaue of X
         centerY = int((figureMoments["m01"] / figureMoments["m00"])) # _ of Y
 
-        shape = detect(c) # using object of class ShapeDetector to detect
+        shape = detect(c, True) # using object of class ShapeDetector to detect
 
         cv2.drawContours(img, [c], -1, BLACK, 1) # drawing counters 
         cv2.circle(img, (centerX, centerY), 5, BLACK, -1) # marking center
